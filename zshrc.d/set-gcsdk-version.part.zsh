@@ -22,7 +22,13 @@ function () {
     local pydir
 
     # Find the highest-versioned Python 3.7.x available.
-    for pydir in "${PYENV_ROOT}"/versions/3.7.*; do
+    #
+    # (N) is a 'Glob Qualifier' - it sets the NULL_GLOB option for the
+    # pattern. Otherwise an error will be output if nothing matches
+    # see man zshexpn#Glob Qualifiers
+    #     man zshoptions#NULL_GLOB
+
+    for pydir in "${PYENV_ROOT}"/versions/3.7.*(N); do
       # Use zsh :e to isolate the filename 'extension' - i.e. everything
       # after the last dot, which is the patch level number in this context.
       if (( ${pydir:e} > ${best} )) && [[ -x "${pydir}/bin/python3" ]]; then
