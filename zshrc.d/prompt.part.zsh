@@ -62,8 +62,13 @@ _yc_build_prompt () {
   local error_color=red
 
   local set_bg_seq
-  if [[ "$LC_TERMINAL" = "iTerm2" && -n "$SSH_CONNECTION" ]]; then
-    set_bg_seq=$(_ycbp_iterm_bg $YC_PROMPT_BG)
+  if [[ "$LC_TERMINAL" = "iTerm2" ]]; then
+    if [[ -n "$SSH_CONNECTION" ]]; then
+      set_bg_seq=$(_ycbp_iterm_bg $YC_PROMPT_BG)
+    fi
+    if [[ -z "$set_bg_seq" ]]; then
+      set_bg_seq=$(_ycbp_iterm_bg 000)
+    fi
   fi
 
   # turn fg string into an xterm256 index
