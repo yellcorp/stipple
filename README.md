@@ -9,3 +9,4 @@ Bunch of dot(file)s, mostly shell init scripts.
     ```
     . ~/stipple/zshrc.d/sourceall.zsh
     ```
+3. Restart shell
