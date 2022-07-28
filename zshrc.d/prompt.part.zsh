@@ -35,6 +35,11 @@
 #   ~/Library.
 # - Requires shell integration to be installed, which doesn't work over
 #   tmux.
+#   - Update: it *does* work, sort of, it is just off by default.
+#     Enable it with:
+#       export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=1
+#     It is off by default because it works best with tmux -CC rather than
+#     in normal mode. Might be worth adding to `tmuxmain` script.
 #
 # This script takes another approach, using an iTerm-specific terminal
 # control sequence to set the background color[2].
