@@ -24,12 +24,7 @@ if [[ $ZSH_VERSION =~ '^5\.[23]$' ]]; then
 
     # Beep on error
     setopt BEEP
-fi
 
-# Stuff added in macOS 12. I don't have macOS 11 handy so I don't know what
-# it added.
-
-if [[ $ZSH_VERSION =~ '^5\.[2-7]$' ]]; then
     # Use keycodes (generated via zkbd) if present, otherwise fallback on
     # values from terminfo
     if [[ -r ${ZDOTDIR:-$HOME}/.zkbd/${TERM}-${VENDOR} ]] ; then
