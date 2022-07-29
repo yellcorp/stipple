@@ -182,7 +182,7 @@ def dir_in_path(dir_, path_list):
             dir_ = os.fsdecode(dir_)
     elif isinstance(path_list, bytes):
         paths = path_list.split(os.pathsep.encode("ascii"))
-        if isinstance(dir_, bytes):
+        if isinstance(dir_, str):
             dir_ = os.fsencode(dir_)
     else:
         raise TypeError("path_list must be str or bytes")
