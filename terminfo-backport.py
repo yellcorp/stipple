@@ -181,7 +181,7 @@ def dir_in_path(dir_, path_list):
         if isinstance(dir_, bytes):
             dir_ = os.fsdecode(dir_)
     elif isinstance(path_list, bytes):
-        paths = path_list.split(os.pathsep.encode("ascii"))
+        paths = path_list.split(os.fsencode(os.pathsep))
         if isinstance(dir_, str):
             dir_ = os.fsencode(dir_)
     else:
