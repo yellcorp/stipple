@@ -242,6 +242,9 @@ def main():
     print("Complete")
 
     if not dir_in_path(out_dir, os.environb.get(b"TERMINFO_DIRS")):
+        # Note - the advice printed here is already being followed if
+        # sourceall.zsh is being sourced from .zshrc. However you will need
+        # to start a new shell terminal for it to start having an effect.
         print()
         print("Could not find the user terminfo directory in TERMINFO_DIRS")
         print(f"  {out_dir}")
