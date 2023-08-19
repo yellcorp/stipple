@@ -36,6 +36,10 @@ function () {
 
     if [[ -n "${best_exe}" ]]; then
       export CLOUDSDK_PYTHON="${best_exe}"
+
+      # Make sure `gcloud compute ssh` can see numpy if you follow the nag
+      # to install it
+      export CLOUDSDK_PYTHON_SITEPACKAGES=1
     fi
   fi
 }
