@@ -1,5 +1,4 @@
-function ()
-{
+function {
   # If there is a copy of Homebrew installed for both arm and intel,
   # this aliases `brew` to the binary that matches the running
   # architecture. Otherwise $PATH will be prioritizing whoever's

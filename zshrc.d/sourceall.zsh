@@ -2,7 +2,7 @@
 # behind in the ensuing environment. Unnamed functions in zsh are
 # immediately invoked.
 
-function () {
+function {
   # "${BASH_SOURCE[0]} equivalent in zsh?"
   # https://stackoverflow.com/questions/9901210/bash-source0-equivalent-in-zsh#answer-28336473
   #

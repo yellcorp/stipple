@@ -5,7 +5,7 @@
 
 bindkey -v
 
-function () {
+function {
   for keymap_name in emacs viins vicmd; do
     if [[ "$TERM" = xterm* ]]; then
       # See README.md for rationale. These are `xterm-noapp` sequences.
