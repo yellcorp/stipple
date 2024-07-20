@@ -10,7 +10,7 @@ function {
     local gcloud_python="${gcloud_venv}/bin/python3"
 
     if [[ -x "${gcloud_python}" ]]; then
-      # This script used to scour pyenv for a sutiable Python interpreter,
+      # This script used to scour pyenv for a suitable Python interpreter,
       # but then I switched to just creating a venv for gcloud in a
       # well-known directory.
       #
