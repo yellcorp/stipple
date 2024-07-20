@@ -47,7 +47,7 @@ function {
   # keymash actually is a file
 
   if [[ -n "$thisfile" && -e "$thisfile" ]]; then
-    thisdir="$(dirname "$thisfile")"
+    local thisdir="$(dirname "$thisfile")"
     for init_script in "$thisdir"/*.part.zsh; do
       . "$init_script"
     done
