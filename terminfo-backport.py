@@ -195,7 +195,7 @@ def main():
     ).stdout.rstrip()
 
     if stock_tic_version != NCURSES_STOCK_EXPECTED_VERSION:
-        print(f"The version of tic at {STOCK_TIC} has an unexpected version")
+        print(f"The version of tic at {STOCK_TIC!r} has an unexpected version")
         print("string. This script might need updating!")
         print(f"  Expected: {NCURSES_STOCK_EXPECTED_VERSION!r}")
         print(f"       Got: {stock_tic_version!r}")
@@ -206,7 +206,7 @@ def main():
         print("Couldn't find an infocmp executable")
         return 1
 
-    print(f"Exporting {TERMINFO_NAME}")
+    print(f"Exporting {TERMINFO_NAME!r}")
     infocmp_result = subprocess.run(
         [infocmp, b"-x", TERMINFO_NAME],
         check=True,
@@ -230,7 +230,7 @@ def main():
         src_file = os.path.join(tempdir, os.fsdecode(TERMINFO_NAME + b".src"))
         with open(src_file, "wb") as writer:
             writer.write(term_src)
-        print(f"Compiling terminfo source with {STOCK_TIC} ({stock_tic_version})")
+        print(f"Compiling terminfo source with {STOCK_TIC!r} ({stock_tic_version})")
         subprocess.run(
             [STOCK_TIC, b"-x", b"-o", os.fsencode(out_dir), os.fsencode(src_file)],
             check=True,

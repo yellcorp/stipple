@@ -74,28 +74,14 @@ import os
 import re
 import sys
 import warnings
-from collections.abc import Callable, Generator
-from typing import Optional
-
-try:
-    # This is Python 3.10+
-    from typing import ParamSpec
-except ImportError:
-    # But we want to be runnable with MacOS stock 3.9 too
-    class ParamSpec:
-        def __init__(self, *args, **kwargs):
-            pass
-
 
 BEL = "\x07"
 TAB = "\t"
 ESC = "\x1b"
 BSLASH = "\\"
 
-_Params = ParamSpec("_Params")
 
-
-def join(fn: Callable[_Params, list[str]]) -> Callable[_Params, str]:
+def join(fn):
     """
     Decorator that wraps a function that returns an iterable of
     strings. It concatenates the wrapped function's return value into
@@ -126,20 +112,20 @@ def join(fn: Callable[_Params, list[str]]) -> Callable[_Params, str]:
     return wrapper
 
 
-def is_iterm() -> bool:
+def is_iterm():
     return os.environ.get("LC_TERMINAL") == "iTerm2"
 
 
-def is_ssh() -> bool:
+def is_ssh():
     return len(os.environ.get("SSH_CONNECTION", "")) > 0
 
 
-def is_tmux() -> bool:
+def is_tmux():
     return os.environ.get("TERM_PROGRAM") == "tmux"
 
 
 @join
-def tmux_guard(seq: str) -> Generator[str]:
+def tmux_guard(seq):
     """
     Wraps a string in a tmux guard sequence that tells tmux to pass it
     through rather than interpreting it.
@@ -165,7 +151,7 @@ def tmux_guard(seq: str) -> Generator[str]:
     ]
 
 
-def if_tmux_guard(seq: str) -> str:
+def if_tmux_guard(seq):
     """
     Wraps a string in a tmux guard sequence IF tmux is in use.
     Otherwise the string is returned verbatim.
@@ -178,7 +164,7 @@ def if_tmux_guard(seq: str) -> str:
 
 
 @join
-def zp_guard(seq: str) -> list[str]:
+def zp_guard(seq):
     """
     Wraps a string in a zsh prompt guard sequence, being %{ … %}
 
@@ -195,7 +181,7 @@ def zp_guard(seq: str) -> list[str]:
 
 
 @join
-def iterm_bg(hexcolor: str) -> list[str]:
+def iterm_bg(hexcolor):
     """
     Returns an iTerm escape sequence that sets the pane's background
     color.
@@ -221,7 +207,7 @@ def iterm_bg(hexcolor: str) -> list[str]:
     ]
 
 
-def zp_tmux_iterm_bg(hexcolor: str) -> str:
+def zp_tmux_iterm_bg(hexcolor):
     """
     Returns an iTerm background color sequence, wrapped in a tmux
     guard if needed, then in turn wrapped in a zsh prompt guard.
@@ -234,7 +220,7 @@ def zp_tmux_iterm_bg(hexcolor: str) -> str:
     return zp_guard(if_tmux_guard(iterm_bg(hexcolor)))
 
 
-def xt_rgb_index(r: int, g: int, b: int) -> int:
+def xt_rgb_index(r, g, b):
     """
     Returns the xterm256 color index for a given r,g,b coordinate.
 
@@ -258,7 +244,7 @@ _XTERM_GRAY_MAP = [16] + list(range(232, 256)) + [231]
 assert len(_XTERM_GRAY_MAP) == 26
 
 
-def xt_gray_index(level: int) -> int:
+def xt_gray_index(level):
     """
     Returns the xterm256 color index for the given gray level.
 
@@ -275,7 +261,7 @@ def xt_gray_index(level: int) -> int:
     return _XTERM_GRAY_MAP[level]
 
 
-def xt_parse_rgbstr(rgb_str: str) -> Optional[int]:
+def xt_parse_rgbstr(rgb_str):
     """
     Returns the xterm256 color index for a 3-digit RGB string.
 
@@ -304,7 +290,7 @@ def xt_parse_rgbstr(rgb_str: str) -> Optional[int]:
     return xt_rgb_index(r, g, b)
 
 
-def xt_fg(palette_index: Optional[int]) -> str:
+def xt_fg(palette_index):
     """
     Returns an SGR sequence that sets the foreground color to the
     specified xterm256 color index.
@@ -321,7 +307,7 @@ def xt_fg(palette_index: Optional[int]) -> str:
     return "" if palette_index is None else f"38;5;{palette_index}"
 
 
-def xt_bg(palette_index: Optional[int]) -> str:
+def xt_bg(palette_index):
     """
     Returns an SGR sequence that sets the background color to the
     specified xterm256 color index.
@@ -339,7 +325,7 @@ def xt_bg(palette_index: Optional[int]) -> str:
 
 
 @join
-def zp_sgr(params: str, text: str) -> list[str]:
+def zp_sgr(params, text):
     """
     Places a string between an SGR terminal sequence and an SGR reset.
     The SGR sequence and the reset are both wrapped with zsh prompt
@@ -362,7 +348,7 @@ def zp_sgr(params: str, text: str) -> list[str]:
 
 
 @join
-def zp_bold(text: str) -> list[str]:
+def zp_bold(text):
     """
     Wraps a string with a zsh prompt bold-start and bold-end sequence.
     """
@@ -370,7 +356,7 @@ def zp_bold(text: str) -> list[str]:
 
 
 @join
-def zp_fgcolor(color: str, text: str) -> list[str]:
+def zp_fgcolor(color, text):
     """
     Wraps a string with a zsh prompt foreground color set and reset
     sequence.
@@ -395,7 +381,7 @@ def zp_fgcolor(color: str, text: str) -> list[str]:
 
 
 @join
-def zp_if(condition: str, if_true: str, if_false: str) -> list[str]:
+def zp_if(condition, if_true, if_false):
     """
     Builds a zsh prompt ternary - that is %(cond.iftrue.iffalse).
 
@@ -419,7 +405,7 @@ def zp_if(condition: str, if_true: str, if_false: str) -> list[str]:
     ]
 
 
-def parse_argv(argv: list[str]) -> dict[str, str]:
+def parse_argv(argv):
     userprefs = {
         "bgcolor": "",
         "hostcolor": "",
@@ -441,7 +427,7 @@ def parse_argv(argv: list[str]) -> dict[str, str]:
 
 
 @join
-def build_prompt(bgcolor: str = "", hostcolor: str = "") -> Generator[str]:
+def build_prompt(bgcolor="", hostcolor=""):
     # Set background color sequence
 
     set_bg_seq = ""
